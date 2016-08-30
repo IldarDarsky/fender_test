@@ -7,26 +7,23 @@ puts''
 #Firefox browser instantiation
 browser = Selenium::WebDriver.for :firefox
 
+browser.manage.window.maximize
+
 #Loading the assertselenium URL
-browser.get.('http://shop.fender.com/en-US/')
+browser.get('http://shop.fender.com/en-US/')
 
 # Timeout = 15 sec
 wait = Selenium::WebDriver::Wait.new(:timeout => 15)
 
-product = wait.until {
-  element = browser.find_element(:link_text, "Products")
+search_field = wait.until {
+  element = browser.find_element(:id, "search-value")
   element if element.displayed?
 }
+search_field.send_keys("Stratocaster")
 
-product.click
 
-
-strats = wait.until {
-  element = browser.find_element(:link_text, "Stratocaster")
-  element if element.displayed?
-}
-
-strats.click
+search = browser.find_element(:name, "qSubmit")
+search.submit
 
 elite_strat_image = wait.until {
     element = browser.find_element(:xpath => "//img[@src='http://www.fmicassets.com/Damroot/MedJpg/10001/0114000700_gtr_frt_001_rr.jpg']")
@@ -35,9 +32,7 @@ elite_strat_image = wait.until {
 elite_strat_image.click
 
 ### verification in case
-puts "Test Passed: 'American Elite Strat' page returned" if wait.until {
-    browser.text.include?'Externally the American Elite Stratocaster has Fender’s timeless style, but under the hood it’s an entirely new breed of guitar designed for 21'
-}
+# in the original
 
 add_to_cart = wait.until {
   element = browser.find_element(:id, "add-to-cart")
@@ -45,35 +40,65 @@ add_to_cart = wait.until {
 }
 add_to_cart.click
 
+
 view_cart = wait.until {
-  element = browser.find_element(class, "mini-cart-label")
+  #element = browser.find_element(:class, "mini-cart-label")
+  element = browser.find_element(:id, "mini-cart")
   element if element.displayed?
 }
+cart_text = view_cart.text
+#puts cart_text
 view_cart.click
 
 cart_quantity = wait.until {
-  element = browser.find_element(class, "mini-cart-qty")
+  element = browser.find_element(:class, "mini-cart-qty")
   element if element.displayed?  
 }
 
+quantity = cart_quantity.text
+puts "Purchased " + quantity + " guitars."
+
 if 
-cart_quantity.text = (1)
+quantity == "(1)"
 puts "Test Passed: 1 Stratocaster has been added to cart'" 
 else
-  puts "FAILED Incident update to \"Resolution and recovery\"\nStatus value is now " + status_value + "Instead of IN_PROGRESS\n\n"
+  puts "FAILED! Number of checked out items is not 1 it is " + quantity + "\n\n"
 end
 
 
-checkout = wait.until {
-  element = browser.find_element(:id, "checkout-form")
+mini_cart = wait.until {
+  element = browser.find_element(:class, "mini-cart-label")
   element if element.displayed?
+}
+mini_cart.click
+
+
+checkout = wait.until {
+	element = browser.find_element(:class, "tablet-small")
+	element if element.displayed?
 }
 checkout.click
 
-### checking out as guest
-browser.find_element(:xpath, "//div[@class='form-row']//button[@class='green-btn'][text()='yes']").click
+
+
+checkout_as_guest = wait.until {
+ element = browser.find_element(:class, "tablet-small")
+ #element = browser.find_element(:id, "checkout-form")
+  element if element.displayed?
+}
+checkout_as_guest.click
+
+
+
+
+
+
+
+
+
 
 ### filling in personall data
+
 
 first_name = wait.until {
   element = browser.find_element(:id, "dwfrm_singleshipping_shippingAddress_addressFields_firstName")
@@ -99,13 +124,12 @@ address2 = wait.until {
 }
 address2.send_keys("Address2")
 
-
 # get the select element    
-states = select.find_elements(:tag_name, "option")
+states = browser.find_elements(:tag_name, "option")
 # select the options
 states.each do |state|
   if state.text == "California"
-  g.click
+  state.click
   break
   end
 end
@@ -121,38 +145,44 @@ zip = wait.until {
   element if element.displayed?
 }
 zip.send_keys("90028")
- 
- 
- 
 
 phone = wait.until {
-  element = browser.find_element(:id, "dwfrm_singleshipping_shippingAddress_addressFields_phone ")
+  element = browser.find_element(:id, "dwfrm_singleshipping_shippingAddress_addressFields_phone")
   element if element.displayed?
 }
-phone.send_keys("90028")
+phone.send_keys("3106130723")
 
-check_box wait.until {
+##### checked by default, if need be use the code below to uncheck
+check_box = wait.until {
   element = browser.find_element(:id, "dwfrm_singleshipping_shippingAddress_useAsBillingAddress")
   element if element.displayed?
 }
-check_box.click
+#check_box.click
 
-radio_box wait.until {
+##### checked by default, if need be use the code below to check other options
+radio_box = wait.until {
   element = browser.find_element(:id, "shipping-method-stdShipping")
+  #element = browser.find_element(:id, "shipping-method-2dayShipping")
   element if element.displayed?
 }
 radio_box.click
 
-browser.find_element(:xpath, "//div[@class='form-row']//button[@class='green-btn'][text()='yes']").click
 
+continue = wait.until {
+ element = browser.find_element(:class, "continue-ship")
+  element if element.displayed?
+}
+sleep 3
+continue.click
+
+page_title = browser.title
+puts "Page Title is: " + page_title
 
 ### Test passed or not
-begin
-puts "Test Passed: 'American Elite Strat' page returned" if wait.until {
-    browser.text.include?'Checkout'
-}
-rescue
-  puts "There is no 'CHECKOOUT' text on the page"
+if page_title == "Billing Checkout | Fender"
+	puts "The test passed successfully. User added 1 instrument to the cart and proceeded with checkout until the Billing Checkout | Fender page was reached" 
+else
+	puts "Failed, user didn't not reach the Billing Checkout | Fender page"
 end
 
 browser.close

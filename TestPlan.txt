@@ -1,0 +1,67 @@
+Test Plan(high level, to esatblish a scope of testing, not to be confused with test cases- very detalied step-by-step break down of test steps:
+Test URL:
+http://shop.fender.com/en-US/electric-guitars/stratocaster/american-elite-stratocaster-hss-shawbucker/0114110723.html
+
+1. Check the upper nav bar navigation:
+Products
+Customize
+Music
+PLay
+Connect
+Expected results:
+each link should take the user to the appropriate page
+
+2. check button functionalities for FB, TWT and ToolTip icons
+Expected result:
+all icons should navigate to appropriate site, TootTip should exapnd into additional options for the user
+
+3. Check navigation of upper right links
+Sign in
+Dealer Locator
+View Cart
+Expected Result
+all links should navigate accordingly
+
+4. Main Fender Image content section 
+Default state - Strat fully displayed
+Hover on should magnify the image enabling a larger view of the guitar fullyl available from the headstock to bottom
+Click on thumbnail below the main image should return the section displayed in the thumbnail
+Hovering on the main section now should enable magnified view of the section displayed on thumbnail
+Click on on left/right arrow on the sides of the thumbnail section should enable shifting of the thumbnailes accordingly
+
+5. Select different body color options for guitar under COLOR section, right of the main image section
+Clicking on a color tile should change the color of the body color of the guitar as well as the body color of the guitars in the thumbnail section
+Clicking on a color tile for Fingerboard material section should change the color of the fingerboard of the guitar in the main image section as well as in thumbnail section
+Changing body color and the fingerboard color should work in separately and in combination, eg, if body of the guitar color is changed but the fingerboard is not then the guitar main section and thumbnails should change accordingly.
+Same way as when body and fingerboard changed both together, one after another.
+
+6. Check functionality of Add to Cart and Play One buttons
+they should redirect the user accordingly
+
+7. Clicking on Add to Wishlist should take the user to the wish list page
+
+Clicking on Fender logo at the lef upper part of the page should take the user to the home page.
+
+8. Check navitaion of the image links under Recommended Gear
+Left/Righ arrows should enable shifting of images accordingly
+Clicking on an image should take the user to the apprpriate page
+
+9 Check navigation for the icons below the Recomended Gear section:
+FB, Tweet, Pinterest, Instagram, Youtube, Google+ "t"
+Expected results:
+All of them open in a new window.
+
+10. Sign up for newsletter.
+a valid email (valid format) needs to be submitted in the field provided, no blank form should be submitted, confirmation about submission upon submission of the email shoud be provided to the user.
+
+11. Check navigation of all links under
+Company
+Whate We Create
+Customer Service
+
+
+12. Footnote links - check navigation:
+Choose your contry
+Privacy Policy
+Terms&Conditions
+Supply Chain Transparency
